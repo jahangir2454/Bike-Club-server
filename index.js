@@ -84,7 +84,7 @@ async function run(){
        })
     //    ============================
 
-    //    dashbord
+    //  ADMIN  dashbord
        app.delete('/deleteAll/:id',async (req, res)=>{
            const id = req.params.id;
            const query = {_id:ObjectId(id)}
@@ -92,15 +92,59 @@ async function run(){
            res.json(result)
        });
 
+    //    update get productCollection
+       app.get('/updateproduct/:id',async (req, res)=>{
+           const id = req.params.id;
+          const query = {_id:ObjectId(id)};
+          const result = await productCollection.findOne(query);
+          res.json(result)
+
+       })
 
        app.get('/manageOder',async (req, res)=>{
             const result = await oderCollection.find({}).toArray();
             res.json(result)
-            console.log(result)
+       });
+
+       app.delete('/manageOder/:id',async (req, res)=>{
+           const id = req.params.id;
+           const query = {_id:ObjectId(id)};
+           const result = await oderCollection.deleteOne(query);
+           res.json(result);
        })
 
-
+       app.put('/manageOder/:id', async (req, res) => {
+           const id = req.params.id;
+           const query = {_id:ObjectId(id)};
+           const upDateItem = req.body;
+           const updateDoc ={
+               $set:{
+                   status:"shipping"
+               }
+           }
+           const result = await oderCollection.updateOne(query,updateDoc);
+           res.json(result);
+           console.log(result)
+       })
     // ==================================
+    // ===================== USER Dashboard 
+
+    app.get('/myOder/:email',async (req, res)=>{
+        const email = req.params.email;
+        const user = {email: email};
+        const result = await oderCollection.find(user).toArray();
+        res.json(result); 
+    })
+
+    app.delete('/myOder/:id',async (req, res)=>{
+        const id = req.params.id;
+        const query = {_id:ObjectId(id)}
+        const result = await oderCollection.deleteOne(query);
+        res.json(result);
+        console.log(result);
+    })
+
+    // ================================
     }
     finally {
         // client.close();
