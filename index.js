@@ -21,6 +21,7 @@ async function run(){
         const productCollection = database.collection('products')//all products collection
         const oderCollection = database.collection('userOder')//all oder collection
         const allUserCollection = database.collection('allUser')// all user collection
+        const userReviewCollection = database.collection('userReview')// all user Review collections
 
 
 
@@ -29,7 +30,7 @@ async function run(){
             const result = await productCollection.insertOne(req.body);
             res.json(result);
         })
-        // product add
+        // product get
         app.get('/product',async (req, res) => {
             const result = await productCollection.find({}).toArray();
             res.json(result);
@@ -142,6 +143,18 @@ async function run(){
         const result = await oderCollection.deleteOne(query);
         res.json(result);
         console.log(result);
+    });
+
+
+    app.post('/review',async (req, res)=>{
+        const result= await userReviewCollection.insertOne(req.body);
+        res.json(result);
+        console.log(result);
+    });
+
+    app.get('/review',async (req, res)=>{
+        const result= await userReviewCollection.find({}).toArray();
+        res.json(result);
     })
 
     // ================================
